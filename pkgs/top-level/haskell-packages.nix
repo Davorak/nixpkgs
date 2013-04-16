@@ -85,10 +85,19 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
                                # refers to the function argument at the
                                # top of this file.
 
-  ghc = callPackage ../development/compilers/ghc/wrapper.nix {
+  ghcInnerWrapper = callPackage ../development/compilers/ghc/wrapper.nix {
     ghc = ghc; # refers to ghcPlain
   };
 
+  ghc = callPackage ../development/compilers/ghc/outer-wrapper.nix {
+    ghc = ghc; # refers to ghcPlain
+    # ghcInnerWrapper did not create links to the ghc documentation in
+    # ~/.nix-profile so this outer wrapper was created so that documentation
+    # gets linked but also prevent rebuilding all packages dependant on
+    # ghcInnerWrapper.
+    ghcWrapper = self.ghcInnerWrapper; # refers to ghc-wrapper
+  };
+  
   # An experimental wrapper around ghcPlain that does not automatically
   # pick up packages from the profile, but instead has a fixed set of packages
   # in its global database. The set of packages can be specified as an
