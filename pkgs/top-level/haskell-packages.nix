@@ -115,6 +115,10 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
     enableLibraryProfiling = enableLibraryProfiling;
   };
 
+  myHaddock = callPackage ../build-support/myHaddock {};
+
+  myHaddockAnnot = callPackage ../build-support/myHaddockAnnot {};
+
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
