@@ -119,6 +119,8 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   myHaddockAnnot = callPackage ../build-support/myHaddockAnnot {};
 
+  myJustHaddock = callPackage ../build-support/cabal-haddock {};
+
   # A variant of the cabal build driver that disables unit testing.
   # Useful for breaking cycles, where the unit test of a package A
   # depends on package B, which has A as a regular build input.
@@ -130,6 +132,7 @@ let result = let callPackage = x : y : modifyPrio (newScope result.final x y);
 
   # Convenience helper function.
   disableTest = x: x.override { cabal = self.cabalNoTest; };
+  justHaddock = x: x.override { cabal = self.myJustHaddock; };
 
   # Haskell Platform
   #
